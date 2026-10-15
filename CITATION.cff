@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite the preprint."
+title: "What Breaks in Long-Lived Agents: An Eight-Month Operating Record of a Ten-Agent Fleet"
+type: dataset
+authors:
+  - family-names: Nuraliev
+    given-names: Ravshan
+    affiliation: Independent Researcher
+date-released: 2026-10-15
+version: "1.0"
+doi: 10.5281/zenodo.23404010
+license: MIT
+repository-code: "https://github.com/rushnur88/what-breaks-in-long-lived-agents"
+preferred-citation:
+  type: article
+  title: "What Breaks in Long-Lived Agents: An Eight-Month Operating Record of a Ten-Agent Fleet"
+  authors:
+    - family-names: Nuraliev
+      given-names: Ravshan
+      affiliation: Independent Researcher
+  year: 2026
+  month: 10
+  doi: 10.5281/zenodo.23404010
+  notes: "Preprint, not peer-reviewed"
