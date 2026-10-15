@@ -68,6 +68,19 @@ def wilcoxon(vals):
     return wplus, math.erfc(abs(z) / math.sqrt(2))
 
 
+def holm(ps):
+    """Holm step-down adjusted p-values, in input order, with the running maximum.
+
+    The pre-registered analysis script omitted the running maximum (see README); this is the
+    corrected form, as in statsmodels' multipletests(method="holm")."""
+    order = sorted(range(len(ps)), key=lambda i: ps[i])
+    out, running = [0.0] * len(ps), 0.0
+    for rank, i in enumerate(order):
+        running = max(running, (len(ps) - rank) * ps[i])
+        out[i] = min(1.0, running)
+    return out
+
+
 def unit_acc(rows, num="correct", den="n"):
     """(regime, unit, arm) -> percent, in file order; units with an empty denominator are dropped."""
     out = {}
@@ -91,9 +104,8 @@ def tests(acc):
         _, p = wilcoxon(d)
         m = statistics.mean(d)
         res.append({"h": label, "n": len(d), "mean": m, "ci": [lo, hi], "p": p / 2 if m > 0 else 1 - p / 2, "pairs": pairs})
-    ranked = sorted(res, key=lambda x: x["p"])
-    for i, x in enumerate(ranked):
-        x["holm"] = min(1.0, x["p"] * (len(ranked) - i))
+    for x, adj in zip(res, holm([x["p"] for x in res])):
+        x["holm"] = adj
     crng = random.Random(SEED)
     for x in res:
         lo, hi, k = cluster_boot(x.pop("pairs"), crng)

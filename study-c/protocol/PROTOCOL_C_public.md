@@ -35,5 +35,7 @@ A subagent (empty arm) reported that some answers can be read off OTHER cloze li
 ## Audit note (after the main run, before scoring) 2026-10-04
 192/193 calls used exactly 2 tool calls. One C2 call (arm F) used 3 in the first run and again in the mandated single rerun: its 66K-character call file exceeds one read, so the subagent read the SAME own file twice (with an offset) and then wrote. Transcript checked, no other file touched. Accepted as compliant with the intent of A1 (read only its own file); the rerun answer is used.
 
+*Correction (2026-10-15).* The count above is wrong for the pilot. Per A1, the 14 pilot calls made one tool call each (a read), and the orchestrator wrote their answer files; all 14 pilot answer files carry the same write time, 16:54:09Z. Accepted main-run calls: 179, of which 178 used exactly two tool calls and one used three; that one call was rerun once, the rerun also used three, and it was accepted. Subagents launched in total: 194 (14 pilot, 179 accepted main, 1 rerun).
+
 ## Deviation (added for the paper, 2026-10-15)
 One change was not declared as an addendum. After the pilot and before any main-run answer, the build script was corrected so that arm B contains only the first injected brief block. The change was committed one minute after the pre-registration and before addendum A1. The protocol text above does not mention it.

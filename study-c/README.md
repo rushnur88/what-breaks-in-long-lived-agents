@@ -1,6 +1,6 @@
 # Study C: reproducibility package
 
-Companion to *What Breaks in Long-Lived Agents: An Eight-Month Operating Record of a Ten-Agent Fleet* (Nuraliev, 2026), https://doi.org/10.5281/zenodo.23404010.
+Companion package for the preprint "What Breaks in Long-Lived Agents: An Eight-Month Operating Record of a Ten-Agent Fleet" (Ravshan Nuraliev, 2026), DOI 10.5281/zenodo.23404010.
 
 This package lets a reader recompute every Study C number in the paper (Section 4, Study C; Appendix A) from per-unit counts. It needs only Python 3 and its standard library.
 
@@ -30,9 +30,15 @@ python3 -m unittest discover -s tests -v        # scorer behaviour + rebuild == 
 - `context_chars`: length of the arm's context in characters.
 - `session_model`: model family that ran the source session at the boundary (claude, glm or deepseek). In C2 the native summary was most likely written by this model; the transcripts do not name the summary's author.
 
+## Analysis correction before publication
+
+The pre-registered analysis script applied Holm's procedure without the running maximum. With it, H2's adjusted p is 0.00015 instead of 0.00012, in the primary analysis and in the blind-check rescoring; no decision changes. The frozen scorer is kept byte-identical; `rebuild.py` carries the correction.
+
+The frozen scorer is an archival artifact (it imports an internal module that is not shipped); the public reproduction entry point is `rebuild.py`.
+
 ## What this package reproduces, and what it does not
 
-It reproduces the computation: from these counts, `rebuild.py` gives every published table entry, interval and p-value exactly. On 2026-10-15 its output was compared line by line with the output of the original analysis, which ran on 2026-10-04 on the full data.
+It reproduces the computation: from these counts, `rebuild.py` gives every published table entry, interval and p-value exactly. On 2026-10-15 its output was compared line by line with the output of the original analysis, which ran on 2026-10-04 on the full data; the only difference is the Holm correction described above.
 
 It does not reproduce the labels. The questions, answer keys and answers come from private production transcripts and are not released. Whether each key was extracted correctly from its transcript, and whether each verdict is right, can be checked only on the private data. Inside the fleet that check was done by a second node (independent re-implementation of the scorer, and the blind check of 114 answers described in the paper). From outside, it is a separate level of reproducibility that this package does not reach.
 

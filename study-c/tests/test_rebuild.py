@@ -2,7 +2,8 @@
 
 expected_published.json holds the numbers printed in the paper. They equal the output of the
 original pre-registered analysis (run on 2026-10-04 on the full private data), which was checked
-line by line against this rebuild on 2026-10-15. Run: python3 -m unittest discover -s tests
+line by line against this rebuild on 2026-10-15, except H2's Holm-adjusted p, which carries the
+correction described in the README (0.00015 instead of 0.00012). Run: python3 -m unittest discover -s tests
 """
 import json, os, sys, unittest
 
@@ -26,6 +27,18 @@ class Arms(unittest.TestCase):
         for arm, fams in EXP["family_C2"].items():
             for f, v in fams.items():
                 self.assertEqual(round(OUT["arms"][arm]["family_pooled"][f], 1), v, (arm, f))
+
+
+class Holm(unittest.TestCase):
+    """Regression for the analysis correction: Holm needs the running maximum."""
+
+    def test_running_maximum(self):
+        got = [round(x, 10) for x in rebuild.holm([0.01, 0.011, 0.20])]
+        self.assertEqual(got, [0.03, 0.03, 0.2])
+
+    def test_input_order_kept(self):
+        got = [round(x, 10) for x in rebuild.holm([0.20, 0.011, 0.01])]
+        self.assertEqual(got, [0.2, 0.03, 0.03])
 
 
 class Tests(unittest.TestCase):
